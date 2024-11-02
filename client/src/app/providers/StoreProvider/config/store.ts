@@ -1,6 +1,7 @@
 import {
 	combineSlices, configureStore,
 } from "@reduxjs/toolkit";
+import { featureSuperheroSlice } from "@/features/Superhero";
 import { $api } from "@/shared/api/api";
 import { rtkApi } from "@/shared/api/rtkApi";
 import { ExtraArgumentType } from "../types/index";
@@ -10,6 +11,7 @@ export const createReduxStore = () => {
 		{
 			[rtkApi.reducerPath]: rtkApi.reducer,
 		},
+		featureSuperheroSlice,
 	);
 
 	const extraArgument: ExtraArgumentType = {

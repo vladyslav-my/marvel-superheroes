@@ -1,0 +1,13 @@
+.UpdateSuperheroForm {
+   display: flex;
+   align-items: start;
+   gap: rem(50);
+
+   &__slider {
+      flex: 0 0 300px;
+   }
+
+   &__form {
+      flex: 1 1 auto;
+   }
+}

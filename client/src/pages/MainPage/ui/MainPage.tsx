@@ -7,6 +7,7 @@ import {
 import {
 	IconDots, IconEye, IconTrash,
 } from "@tabler/icons-react";
+import { AppLayout } from "@/widgets/AppLoyout";
 import { superheroApi } from "@/entities/Superhero";
 import { SwiperSlider } from "@/shared/components/sliders";
 import cls from "./MainPage.module.scss";
@@ -63,31 +64,29 @@ const UiCard = () => {
 };
 
 export const MainPage = () => {
-	const {
-		data, isFetching, isLoading, error,
-	} = superheroApi.useGetAllQuery({
-		page: 1,
-		limit: 10,
-	});
+	// const {
+	// 	data, isFetching, isLoading, error,
+	// } = superheroApi.useGetAllQuery({
+	// 	page: 1,
+	// 	limit: 10,
+	// });
 
 	return (
-		<div className={cls.MainPage}>
-			<Container>
-				<h1>Marvel information</h1>
-				<div className={cls.MainPage__cards}>
-					<UiCard />
-					<UiCard />
-					<UiCard />
-					<UiCard />
-					<UiCard />
-					<UiCard />
-					<UiCard />
-					<UiCard />
-					<UiCard />
-					<UiCard />
-					<UiCard />
-				</div>
-			</Container>
-		</div>
+		<AppLayout className={cls.MainPage}>
+			<h1>Marvel information</h1>
+			<div className={cls.MainPage__cards}>
+				<UiCard />
+				<UiCard />
+				<UiCard />
+				<UiCard />
+				<UiCard />
+				<UiCard />
+				<UiCard />
+				<UiCard />
+				<UiCard />
+				<UiCard />
+				<UiCard />
+			</div>
+		</AppLayout>
 	);
 };

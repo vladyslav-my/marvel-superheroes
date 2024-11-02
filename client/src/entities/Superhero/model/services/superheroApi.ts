@@ -24,12 +24,12 @@ export const superheroApi = rtkApi.injectEndpoints({
 			}),
 		}),
 
-		create: build.mutation<any, SuperheroBody>({
-			query: ({ id, ...data }) => ({
+		create: build.mutation<any, any>({
+			query: ({ formData }) => ({
 				invalidatesTags: ["superhero"],
-				url: `superhero/${id}`,
+				url: "superhero",
 				method: "POST",
-				data,
+				data: formData,
 			}),
 		}),
 
