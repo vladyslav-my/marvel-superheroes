@@ -1,0 +1,64 @@
+.DetailsHeroPage {
+   
+}
+
+
+.ImagesPicker {
+   display: inline-flex;
+   gap: rem(20);
+
+   &__list {
+      display: inline-flex;
+      gap: rem(20);
+   }
+
+
+   &__item {
+      width: rem(100);
+      height: rem(100);
+   }
+
+   &__removeButton {
+      position: relative;
+
+      height: 100%;
+
+      &:hover {
+         .ImagesPicker__removeIcon {
+            color: var(--mantine-color-red-9);
+         }
+      }
+   }
+
+   &__removeIcon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+
+      width: rem(50);
+      height: rem(50);
+
+      transition: color $transition-ease-200;
+
+      transform: translate(-50%, -50%);
+
+      color: var(--mantine-color-red-8);
+   }
+
+   &__image {
+      width: 100%;
+      height: 100%;
+   }
+
+   &__dropzone {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: rem(100);
+      height: rem(100);
+
+      border: 1px solid var(--mantine-color-gray-4);
+      border-radius: rem(8);
+   }
+}
