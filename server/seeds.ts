@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from 'src/app.module';
+import { AppModule } from 'src/app-with-seeds.module';
 import { MarvelSeedService } from './src/seeds/marvel-seed.service';
 
 async function bootstrap() {

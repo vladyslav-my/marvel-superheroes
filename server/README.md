@@ -1,3 +1,6 @@
-npm i
-npx prisma migrate dev --name init
-npm run seeds
+
+
+1) .env.exaple replace on .env; add your database mysql data in DATABASE_URL
+2) install packages: npm i
+3) run migrate: npx prisma migrate dev --name init
+4) run seeds with marvel api: npm run seeds
