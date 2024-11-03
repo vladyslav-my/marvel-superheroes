@@ -3,7 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateSuperheroDto } from './dto/create-superhero.dto';
 import { UpdateSuperheroDto } from './dto/update-superhero.dto';
-
+import * as fs from 'fs';
+import * as path from 'path';
 @Injectable()
 export class SuperheroService {
   constructor(private prisma: PrismaService) {}
@@ -27,6 +28,9 @@ export class SuperheroService {
       skip,
       take: limit,
       include: { images: true },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     const superheroesData = superheroes.map((superhero) => ({
@@ -81,6 +85,28 @@ export class SuperheroService {
   }
 
   async remove(id: number) {
+    const superhero = await this.prisma.superhero.findUnique({
+      where: {
+        id,
+      },
+      include: { images: true },
+    });
+
+    superhero.images.forEach((image) => {
+      const filePath = path.join(
+        process.cwd(),
+        'uploads',
+        path.basename(image.url),
+      );
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error(`Failed to delete file: ${filePath}`, err);
+        } else {
+          console.log(`Deleted file: ${filePath}`);
+        }
+      });
+    });
+
     return this.prisma.superhero.delete({ where: { id } });
   }
 
@@ -97,12 +123,38 @@ export class SuperheroService {
   }
 
   async deleteImages(superheroId: number, imageIds: number[]) {
+    const imagesToDelete = await this.prisma.image.findMany({
+      where: {
+        id: { in: imageIds },
+        superheroId,
+      },
+      select: {
+        url: true,
+      },
+    });
+
     await this.prisma.image.deleteMany({
       where: {
         id: { in: imageIds },
         superheroId,
       },
     });
+
+    imagesToDelete.forEach((image) => {
+      const filePath = path.join(
+        process.cwd(),
+        'uploads',
+        path.basename(image.url),
+      );
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error(`Failed to delete file: ${filePath}`, err);
+        } else {
+          console.log(`Deleted file: ${filePath}`);
+        }
+      });
+    });
+
     return { message: 'Images deleted successfully' };
   }
 }

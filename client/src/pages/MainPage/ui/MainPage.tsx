@@ -43,6 +43,7 @@ export const MainPage = () => {
 	const onChangePage = useCallback((page: number) => {
 		setCurrentPage(page);
 		navigate(`?page=${page}`, { replace: true });
+		window.scrollTo({ top: 0, behavior: "instant" });
 	}, [navigate]);
 
 	const TextMessage = useMemo(() => {
@@ -57,7 +58,7 @@ export const MainPage = () => {
 		<AppLayout className={cls.MainPage}>
 			<div className={cls.MainPage__content}>
 				<div className={cls.MainPage__cards}>
-					<AnimatePresence mode="wait">
+					<AnimatePresence mode="popLayout">
 						{superheroesCards}
 					</AnimatePresence>
 				</div>

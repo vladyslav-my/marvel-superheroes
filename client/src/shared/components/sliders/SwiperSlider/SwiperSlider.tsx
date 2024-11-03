@@ -45,6 +45,7 @@ export const SwiperSlider: FC<SwiperSliderProps> = memo(({ className, images }) 
 			swiperInstanceRef.current = new Swiper(swiperContainerRef.current, {
 				spaceBetween: 5,
 				slidesPerView: 1,
+				loop: true,
 				navigation: {
 					nextEl: nextButtonRef.current,
 					prevEl: prevButtonRef.current,
