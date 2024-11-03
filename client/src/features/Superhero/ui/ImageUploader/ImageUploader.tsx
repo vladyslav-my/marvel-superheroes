@@ -5,17 +5,18 @@ import clsx from "clsx";
 import {
 	FC, useCallback, useMemo,
 } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, UseFormReturn } from "react-hook-form";
+import { ImageType } from "../SuperheroForm/SuperheroForm";
 import cls from "./ImageUploader.module.scss";
 
 interface ImageUploaderProps {
 	className?: string;
-	form: any;
-	setImages: any;
-	images: any;
+	form: UseFormReturn<any, any, undefined>;
+	setImages: React.Dispatch<React.SetStateAction<ImageType[]>>;
+	images: ImageType[];
 }
 
-export const ImageUploader: FC<any> = ({
+export const ImageUploader: FC<ImageUploaderProps> = ({
 	className, form, images, setImages,
 }) => {
 	const onDrop = useCallback((field: any) => (files: FileWithPath[]) => {

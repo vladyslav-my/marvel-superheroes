@@ -13,6 +13,7 @@ export default defineConfig(() => {
 	];
 
 	return {
+		base: "superhero",
 		server: {
 			host: "0.0.0.0",
 			port: 3001,

@@ -1,4 +1,4 @@
-import { Image, Loader } from "@mantine/core";
+import { Image } from "@mantine/core";
 import clsx from "clsx";
 import { FC, memo } from "react";
 import Error404Image from "@/shared/assets/error-404.webp";

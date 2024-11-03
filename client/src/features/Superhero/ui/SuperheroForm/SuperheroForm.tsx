@@ -4,10 +4,9 @@ import {
 } from "@mantine/core";
 import clsx from "clsx";
 import {
-	FC, useCallback, useEffect, useState,
+	FC, useCallback,
 } from "react";
-import { Controller, useForm, UseFormReturn } from "react-hook-form";
-import { superheroApi } from "@/entities/Superhero";
+import { Controller, UseFormReturn } from "react-hook-form";
 import { ImageUploader } from "../ImageUploader/ImageUploader";
 import cls from "./SuperheroForm.module.scss";
 
@@ -21,7 +20,7 @@ type SuperheroFormInputs = {
 	addedImagesFiles: File[];
 };
 
-type ImageType = { id: number; url: string; isNew?: boolean };
+export type ImageType = { id: number; url: string; isNew?: boolean };
 interface SuperheroFormProps {
 	className?: string;
 	isLoading: boolean;
@@ -94,7 +93,7 @@ export const SuperheroForm: FC<SuperheroFormProps> = ({
 				<Controller
 					name="origin_description"
 					control={form.control}
-					render={({ field }) => <Textarea className={cls.SuperheroForm__field} readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Origin Description" {...field} />}
+					render={({ field }) => <Textarea className={cls.SuperheroForm__field} rows={4} readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Origin Description" {...field} />}
 				/>
 				<Controller
 					name="catch_phrase"
@@ -106,7 +105,6 @@ export const SuperheroForm: FC<SuperheroFormProps> = ({
 					control={form.control}
 					render={({ field }) => <Textarea className={cls.SuperheroForm__field} readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Superpowers" {...field} />}
 				/>
-
 				{isEditMode && (
 					<ImageUploader form={form} setImages={setImages} images={images} />
 				)}

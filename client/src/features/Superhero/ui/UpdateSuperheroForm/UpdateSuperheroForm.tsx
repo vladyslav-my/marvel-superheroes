@@ -1,5 +1,4 @@
 import { notifications } from "@mantine/notifications";
-import { IconError404, IconError404Off } from "@tabler/icons-react";
 import clsx from "clsx";
 import {
 	FC, useCallback, useEffect, useState,

@@ -11,7 +11,7 @@ export type AppRouteProps = RouteProps & {
 
 export const routes: AppRouteProps[] = [
 	{
-		path: getMainRoutePath(),
+		path: getSuperheroRoutePath(),
 		element: <MainPage />,
 	},
 	{

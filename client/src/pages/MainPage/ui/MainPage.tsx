@@ -1,13 +1,24 @@
 import { Pagination } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useMemo, useState } from "react";
+import {
+	useCallback, useMemo, useState,
+} from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AppLayout } from "@/widgets/AppLoyout";
 import { superheroApi, SuperheroCard } from "@/entities/Superhero";
-import { PageLoader } from "@/shared/components/common";
+import { CenteredText, PageLoader } from "@/shared/components/common";
 import cls from "./MainPage.module.scss";
 
 export const MainPage = () => {
-	const [currentPage, setCurrentPage] = useState(1);
+	const location = useLocation();
+	const navigate = useNavigate();
+
+	const initialPage = useMemo(() => {
+		const params = new URLSearchParams(location.search);
+		return parseInt(params.get("page") || "1", 10);
+	}, [location.search]);
+
+	const [currentPage, setCurrentPage] = useState(initialPage);
 	const {
 		data: superheroData, isFetching, isLoading,
 	} = superheroApi.useGetAllQuery({
@@ -31,7 +42,16 @@ export const MainPage = () => {
 
 	const onChangePage = useCallback((page: number) => {
 		setCurrentPage(page);
-	}, []);
+		navigate(`?page=${page}`, { replace: true });
+	}, [navigate]);
+
+	const TextMessage = useMemo(() => {
+		if (!superheroData?.totalPages || currentPage > superheroData?.totalPages) {
+			return <CenteredText>Page not found</CenteredText>;
+		} else if (!superheroData?.data.length) {
+			return <CenteredText>Superhero collections is empty</CenteredText>;
+		}
+	}, [currentPage, superheroData?.data.length, superheroData?.totalPages]);
 
 	return (
 		<AppLayout className={cls.MainPage}>
@@ -42,6 +62,7 @@ export const MainPage = () => {
 					</AnimatePresence>
 				</div>
 				{isFetching || isLoading && <PageLoader />}
+				{TextMessage}
 			</div>
 			{superheroData && superheroData?.totalPages > 1 && (
 				<Pagination
