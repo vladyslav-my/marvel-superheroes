@@ -9,7 +9,14 @@ import * as path from 'path';
 export class SuperheroService {
   constructor(private prisma: PrismaService) {}
 
+  private delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   async create(data: CreateSuperheroDto, images: string[]) {
+    //! hardcore
+    await this.delay(1200);
+
     return this.prisma.superhero.create({
       data: {
         ...data,
@@ -22,6 +29,9 @@ export class SuperheroService {
   }
 
   async findAll(page: number, limit: number) {
+    //! hardcore
+    await this.delay(1200);
+
     const skip = (page - 1) * limit;
     const totalCount = await this.prisma.superhero.count();
     const superheroes = await this.prisma.superhero.findMany({
@@ -52,6 +62,9 @@ export class SuperheroService {
   }
 
   async findOne(id: number) {
+    //! hardcore
+    await this.delay(1200);
+
     const superhero = await this.prisma.superhero.findUnique({
       where: { id },
       include: { images: true },
@@ -72,6 +85,9 @@ export class SuperheroService {
   }
 
   async update(id: number, data: UpdateSuperheroDto, images: string[]) {
+    //! hardcore
+    await this.delay(1200);
+
     return this.prisma.superhero.update({
       where: { id },
       data: {
@@ -85,6 +101,9 @@ export class SuperheroService {
   }
 
   async remove(id: number) {
+    //! hardcore
+    await this.delay(1200);
+
     const superhero = await this.prisma.superhero.findUnique({
       where: {
         id,
@@ -111,6 +130,9 @@ export class SuperheroService {
   }
 
   async addImages(id: number, imageUrls: string[]) {
+    //! hardcore
+    await this.delay(1200);
+
     return this.prisma.superhero.update({
       where: { id },
       data: {
@@ -123,6 +145,9 @@ export class SuperheroService {
   }
 
   async deleteImages(superheroId: number, imageIds: number[]) {
+    //! hardcore
+    await this.delay(1200);
+
     const imagesToDelete = await this.prisma.image.findMany({
       where: {
         id: { in: imageIds },

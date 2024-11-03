@@ -47,7 +47,9 @@ export const MainPage = () => {
 	}, [navigate]);
 
 	const TextMessage = useMemo(() => {
-		if (!superheroData?.totalPages || currentPage > superheroData?.totalPages) {
+		if (!superheroData?.totalPages) {
+			return null;
+		} else if (currentPage > superheroData?.totalPages) {
 			return <CenteredText>Page not found</CenteredText>;
 		} else if (!superheroData?.data.length) {
 			return <CenteredText>Superhero collections is empty</CenteredText>;
@@ -57,12 +59,13 @@ export const MainPage = () => {
 	return (
 		<AppLayout className={cls.MainPage}>
 			<div className={cls.MainPage__content}>
-				<div className={cls.MainPage__cards}>
-					<AnimatePresence mode="popLayout">
-						{superheroesCards}
-					</AnimatePresence>
-				</div>
-				{isFetching || isLoading && <PageLoader />}
+				{(isFetching || isLoading) ? <PageLoader /> : (
+					<div className={cls.MainPage__cards}>
+						<AnimatePresence mode="popLayout">
+							{superheroesCards}
+						</AnimatePresence>
+					</div>
+				)}
 				{TextMessage}
 			</div>
 			{superheroData && superheroData?.totalPages > 1 && (

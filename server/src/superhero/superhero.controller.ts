@@ -23,7 +23,7 @@ export class SuperheroController {
   constructor(private readonly superheroService: SuperheroService) {}
 
   @Get()
-  findAll(@Query('page') page = 1, @Query('limit') limit = 10) {
+  async findAll(@Query('page') page = 1, @Query('limit') limit = 10) {
     return this.superheroService.findAll(+page, +limit);
   }
 
