@@ -8,11 +8,10 @@ import { UpdateSuperheroDto } from './dto/update-superhero.dto';
 export class SuperheroService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: CreateSuperheroDto) {
-    const { images, ...createData } = data;
+  async create(data: CreateSuperheroDto, images: string[]) {
     return this.prisma.superhero.create({
       data: {
-        ...createData,
+        ...data,
         images: {
           create: images.map((url) => ({ url })),
         },
@@ -29,8 +28,19 @@ export class SuperheroService {
       take: limit,
       include: { images: true },
     });
+
+    const superheroesData = superheroes.map((superhero) => ({
+      id: superhero.id,
+      nickname: superhero.nickname,
+      origin_description: superhero.origin_description,
+      images: superhero.images.map((image) => ({
+        id: image.id,
+        url: image.url,
+      })),
+    }));
+
     return {
-      data: superheroes,
+      data: superheroesData,
       totalCount,
       currentPage: page,
       totalPages: Math.ceil(totalCount / limit),
@@ -38,19 +48,30 @@ export class SuperheroService {
   }
 
   async findOne(id: number) {
-    return this.prisma.superhero.findUnique({
+    const superhero = await this.prisma.superhero.findUnique({
       where: { id },
       include: { images: true },
     });
+
+    return {
+      id: superhero.id,
+      nickname: superhero.nickname,
+      real_name: superhero.real_name,
+      origin_description: superhero.origin_description,
+      catch_phrase: superhero.catch_phrase,
+      superpowers: superhero.superpowers,
+      images: superhero.images.map((image) => ({
+        id: image.id,
+        url: image.url,
+      })),
+    };
   }
 
-  async update(id: number, data: UpdateSuperheroDto) {
-    console.log(data);
-    const { images, ...updateData } = data;
+  async update(id: number, data: UpdateSuperheroDto, images: string[]) {
     return this.prisma.superhero.update({
       where: { id },
       data: {
-        ...updateData,
+        ...data,
         images: {
           create: images.map((url) => ({ url })),
         },

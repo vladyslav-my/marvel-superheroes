@@ -39,10 +39,12 @@ export class MarvelSeedService implements OnModuleInit {
 
       const characters = data.data.results.map((character) => ({
         nickname: character.name,
-        //   origin_description: character.description,
-        images: [
-          `${character.thumbnail.path}.${character.thumbnail.extension}`,
-        ],
+        origin_description: character.description,
+        images: {
+          create: {
+            url: `${character.thumbnail.path}.${character.thumbnail.extension}`,
+          },
+        },
       }));
 
       for (const character of characters) {

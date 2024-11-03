@@ -1,7 +1,23 @@
 .MainPage {
+   display: flex;
+   flex-direction: column;
+   gap: rem(30);
+
+   justify-content: space-between;
+
    &__cards {
       display: grid;
+      flex: 1 1 auto;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: rem(20);
    }
+
+   &__pagination {
+      align-self: center;
+      flex: 0 0 auto;
+   }
+}
+
+.SuperheroCard {
+   height: 100%;
 }

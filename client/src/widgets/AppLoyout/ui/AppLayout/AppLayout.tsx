@@ -11,9 +11,9 @@ interface AppLayoutProps {
 
 export const AppLayout: FC<AppLayoutProps> = ({ className, children }) => {
 	return (
-		<Container className={clsx(cls.AppLayout, {}, [className])}>
-			<Header />
-			<main>
+		<Container className={cls.AppLayout}>
+			<Header className={cls.AppLayout__header} />
+			<main className={clsx(cls.AppLayout__main, className)}>
 				{children}
 			</main>
 		</Container>

@@ -3,7 +3,7 @@ CREATE TABLE `Superhero` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `nickname` VARCHAR(191) NOT NULL DEFAULT '',
     `real_name` VARCHAR(191) NOT NULL DEFAULT '',
-    `origin_description` VARCHAR(191) NOT NULL DEFAULT '',
+    `origin_description` TEXT NOT NULL,
     `superpowers` VARCHAR(191) NOT NULL DEFAULT '',
     `catch_phrase` VARCHAR(191) NOT NULL DEFAULT '',
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),

@@ -1,17 +1,19 @@
 import { notifications } from "@mantine/notifications";
+import { IconError404, IconError404Off } from "@tabler/icons-react";
 import clsx from "clsx";
 import {
 	FC, useCallback, useEffect, useState,
 } from "react";
 import { useForm } from "react-hook-form";
 import { superheroApi } from "@/entities/Superhero";
+import { Page404Error, PageLoader } from "@/shared/components/common";
 import { SwiperSlider } from "@/shared/components/sliders";
 import { SuperheroForm } from "../SuperheroForm/SuperheroForm";
 import cls from "./UpdateSuperheroForm.module.scss";
 
 interface UpdateSuperheroFormProps {
 	className?: string;
-	id?: number;
+	id: number;
 }
 
 type SuperheroFormInputs = {
@@ -26,8 +28,8 @@ type SuperheroFormInputs = {
 
 type ImageType = { id: number; url: string; isNew?: boolean };
 
-export const UpdateSuperheroForm: FC<UpdateSuperheroFormProps> = ({ className, id = 1 }) => {
-	const { data: superhero, refetch } = superheroApi.useGetOneQuery({ id });
+export const UpdateSuperheroForm: FC<UpdateSuperheroFormProps> = ({ className, id }) => {
+	const { data: superhero, isLoading: dataIsLoading, isFetching: dataIsFetching } = superheroApi.useGetOneQuery({ id });
 	const [updateSuperhero, { isLoading }] = superheroApi.useUpdateMutation();
 	const [deleteImages] = superheroApi.useDeleteImagesMutation();
 	const [images, setImages] = useState<ImageType[]>([]);
@@ -63,6 +65,7 @@ export const UpdateSuperheroForm: FC<UpdateSuperheroFormProps> = ({ className, i
 				await	deleteImages({ id, imageIds: data.deletedImageIds });
 			}
 
+			// @ts-ignore
 			await updateSuperhero({ id, formData });
 
 			notifications.show({
@@ -76,9 +79,8 @@ export const UpdateSuperheroForm: FC<UpdateSuperheroFormProps> = ({ className, i
 			});
 		} finally {
 			toogleEditMode(false);
-			refetch();
 		}
-	}, [updateSuperhero, id, deleteImages, toogleEditMode, refetch]);
+	}, [updateSuperhero, id, deleteImages, toogleEditMode]);
 
 	useEffect(() => {
 		if (superhero) {
@@ -95,9 +97,17 @@ export const UpdateSuperheroForm: FC<UpdateSuperheroFormProps> = ({ className, i
 		}
 	}, [superhero, form]);
 
+	if (dataIsLoading || dataIsFetching) {
+		return <PageLoader />;
+	}
+
+	if (!superhero) {
+		return <Page404Error />;
+	}
+
 	return (
 		<div className={clsx(cls.UpdateSuperheroForm, {}, [className])}>
-			<SwiperSlider className={cls.UpdateSuperheroForm__slider} />
+			<SwiperSlider className={cls.UpdateSuperheroForm__slider} images={superhero?.images} />
 			<SuperheroForm
 				className={cls.UpdateSuperheroForm__form}
 				form={form}

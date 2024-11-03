@@ -1,10 +1,13 @@
 import { File } from "buffer";
 import { rtkApi } from "@/shared/api/rtkApi";
-import { SuperheroBody } from "../types";
+import {
+	CreateSuperheroRequest, MessageResponse, SuperheroGetAllResponse, SuperheroGetOneResponse,
+	UpdateSuperheroRequest,
+} from "../types";
 
 export const superheroApi = rtkApi.injectEndpoints({
 	endpoints: (build) => ({
-		getAll: build.query<any[], { page?: number, limit?: number }>({
+		getAll: build.query<SuperheroGetAllResponse, { page?: number, limit?: number }>({
 			providesTags: ["superhero"],
 			query: ({ page, limit }) => ({
 				url: "superhero",
@@ -16,7 +19,7 @@ export const superheroApi = rtkApi.injectEndpoints({
 			}),
 		}),
 
-		getOne: build.query<any, { id: number }>({
+		getOne: build.query<SuperheroGetOneResponse, { id: number }>({
 			providesTags: ["superhero"],
 			query: ({ id }) => ({
 				url: `superhero/${id}`,
@@ -24,47 +27,47 @@ export const superheroApi = rtkApi.injectEndpoints({
 			}),
 		}),
 
-		create: build.mutation<any, any>({
+		create: build.mutation<MessageResponse, { formData: CreateSuperheroRequest }>({
+			invalidatesTags: ["superhero"],
 			query: ({ formData }) => ({
-				invalidatesTags: ["superhero"],
 				url: "superhero",
 				method: "POST",
-				data: formData,
+				body: formData,
 			}),
 		}),
 
-		update: build.mutation<any, any>({
+		update: build.mutation<MessageResponse, { id: number, formData: UpdateSuperheroRequest }>({
+			invalidatesTags: ["superhero"],
 			query: ({ id, formData }) => ({
-				invalidatesTags: ["superhero"],
 				url: `superhero/${id}`,
 				method: "PATCH",
-				data: formData,
+				body: formData,
 			}),
 		}),
 
-		delete: build.mutation<any, { id: number }>({
+		delete: build.mutation<MessageResponse, { id: number }>({
 			invalidatesTags: ["superhero"],
 			query: ({ id }) => ({
 				url: `superhero/${id}`,
-				method: "DELELE",
+				method: "DELETE",
 			}),
 		}),
 
-		addImages: build.mutation<any, { id: number, images: File[] }>({
+		addImages: build.mutation<MessageResponse, { id: number, images: File[] }>({
+			invalidatesTags: ["superhero"],
 			query: ({ id, images }) => ({
-				invalidatesTags: ["superhero"],
 				url: `superhero/${id}/images`,
 				method: "POST",
 				body: { images },
 			}),
 		}),
 
-		deleteImages: build.mutation<any, { id: number, imageIds: number[] }>({
+		deleteImages: build.mutation<MessageResponse, { id: number, imageIds: number[] }>({
+			invalidatesTags: ["superhero"],
 			query: ({ id, imageIds }) => ({
-				invalidatesTags: ["superhero"],
 				url: `superhero/${id}/images`,
 				method: "DELETE",
-				data: { imageIds },
+				body: { imageIds },
 			}),
 		}),
 	}),

@@ -1,92 +1,56 @@
-import {
-	ActionIcon, Button, Card, Container, Group, Image, Menu,
-	rem,
-	SimpleGrid,
-	Text,
-} from "@mantine/core";
-import {
-	IconDots, IconEye, IconTrash,
-} from "@tabler/icons-react";
+import { Pagination } from "@mantine/core";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useMemo, useState } from "react";
 import { AppLayout } from "@/widgets/AppLoyout";
-import { superheroApi } from "@/entities/Superhero";
-import { SwiperSlider } from "@/shared/components/sliders";
+import { superheroApi, SuperheroCard } from "@/entities/Superhero";
+import { PageLoader } from "@/shared/components/common";
 import cls from "./MainPage.module.scss";
 
-const images = [
-	"https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
-	"https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
-	"https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png",
-];
-
-const UiCard = () => {
-	return (
-		<Card withBorder shadow="sm" radius="md">
-			<Card.Section withBorder inheritPadding py="xs">
-				<Group justify="space-between">
-					<Text fw={500}>Review pictures</Text>
-					<Menu withinPortal position="bottom-end" shadow="sm">
-						<Menu.Target>
-							<ActionIcon variant="subtle" color="gray">
-								<IconDots style={{ width: rem(16), height: rem(16) }} />
-							</ActionIcon>
-						</Menu.Target>
-
-						<Menu.Dropdown>
-							<Menu.Item leftSection={<IconEye style={{ width: rem(14), height: rem(14) }} />}>
-								Preview all
-							</Menu.Item>
-							<Menu.Item
-								leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
-								color="red"
-							>
-								Delete all
-							</Menu.Item>
-						</Menu.Dropdown>
-					</Menu>
-				</Group>
-			</Card.Section>
-
-			<Text mt="sm" c="dimmed" size="sm">
-				<Text span inherit c="var(--mantine-color-anchor)">
-					200+ images uploaded
-				</Text>{" "}
-				since last visit, review them to select which one should be added to your gallery
-			</Text>
-
-			<Card.Section mt="sm">
-				<SwiperSlider />
-			</Card.Section>
-			<Button color="blue" fullWidth mt="md" radius="md">
-				View Details
-			</Button>
-		</Card>
-	);
-};
-
 export const MainPage = () => {
-	// const {
-	// 	data, isFetching, isLoading, error,
-	// } = superheroApi.useGetAllQuery({
-	// 	page: 1,
-	// 	limit: 10,
-	// });
+	const [currentPage, setCurrentPage] = useState(1);
+	const {
+		data: superheroData, isFetching, isLoading,
+	} = superheroApi.useGetAllQuery({
+		page: currentPage,
+		limit: 9,
+	});
+
+	const superheroesCards = useMemo(() => {
+		return superheroData?.data.map((entity, index) => (
+			<motion.div
+				key={`${entity.id}-${currentPage}`}
+				initial={{ opacity: 0, y: 10 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ delay: index * 0.1 }}
+				exit={{ opacity: 0, y: -20 }}
+			>
+				<SuperheroCard className={cls.SuperheroCard} key={entity.id} entity={entity} />
+			</motion.div>
+		));
+	}, [currentPage, superheroData?.data]);
+
+	const onChangePage = useCallback((page: number) => {
+		setCurrentPage(page);
+	}, []);
 
 	return (
 		<AppLayout className={cls.MainPage}>
-			<h1>Marvel information</h1>
-			<div className={cls.MainPage__cards}>
-				<UiCard />
-				<UiCard />
-				<UiCard />
-				<UiCard />
-				<UiCard />
-				<UiCard />
-				<UiCard />
-				<UiCard />
-				<UiCard />
-				<UiCard />
-				<UiCard />
+			<div className={cls.MainPage__content}>
+				<div className={cls.MainPage__cards}>
+					<AnimatePresence mode="wait">
+						{superheroesCards}
+					</AnimatePresence>
+				</div>
+				{isFetching || isLoading && <PageLoader />}
 			</div>
+			{superheroData && superheroData?.totalPages > 1 && (
+				<Pagination
+					classNames={{ root: cls.MainPage__pagination }}
+					total={superheroData?.totalPages}
+					value={currentPage}
+					onChange={onChangePage}
+				/>
+			)}
 		</AppLayout>
 	);
 };

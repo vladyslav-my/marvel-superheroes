@@ -8,7 +8,8 @@ import { StoreProvider } from "./app/providers/StoreProvider";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/dropzone/styles.css";
-import '@mantine/notifications/styles.css';
+import "@mantine/notifications/styles.css";
+import "swiper/css";
 
 import "@/shared/scss/layout/index.scss";
 

@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SuperheroModule } from './superhero/superhero.module';
 import { PrismaModule } from 'nestjs-prisma';
+import { MarvelSeedService } from './seeds/marvel-seed.service';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { PrismaModule } from 'nestjs-prisma';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, MarvelSeedService],
 })
 export class AppModule {}

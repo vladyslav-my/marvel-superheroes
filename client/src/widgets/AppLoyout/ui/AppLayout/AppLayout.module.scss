@@ -1,5 +1,15 @@
 .AppLayout {
-   display: flex;
-   flex-direction: column;
+   display: grid;
+   grid-template-rows: auto 1fr;
+
+   height: 100%;
    gap: rem(50);
+
+   padding: var(--mantine-spacing-md);
+
+   &__main {
+      flex: 1 1 auto;
+
+      padding-bottom: var(--mantine-spacing-md);
+   }
 }

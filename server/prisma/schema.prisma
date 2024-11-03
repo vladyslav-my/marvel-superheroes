@@ -18,7 +18,7 @@ model Superhero {
   id                 Int       @id @default(autoincrement())
   nickname           String    @default("")
   real_name          String    @default("")
-  origin_description String    @default("")
+  origin_description String    @db.Text
   superpowers        String    @default("")
   catch_phrase       String    @default("")
   images             Image[]   @relation("SuperheroImages")

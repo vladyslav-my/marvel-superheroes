@@ -1,5 +1,3 @@
-import "swiper/css";
-
 import { UnstyledButton } from "@mantine/core";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import clsx from "clsx";
@@ -9,33 +7,28 @@ import {
 } from "react";
 import Swiper from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
+import PlaceHolderHeroImage from "../assets/placeholder-hero.jpg";
 import cls from "./SwiperSlider.module.scss";
 
 interface SwiperSliderProps {
 	className?: string;
-	images?: string[];
+	images?: {
+		id: number;
+		url: string;
+	}[];
 }
 
-const images = [ // !hardcore
-	"https://kartinki.pics/uploads/posts/2022-03/1647619378_1-kartinkin-net-p-petukhi-kartinki-1.jpg",
-	"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxHpRFPjKzOsmAUfJtb913G3agNMlKdzOQdsLRMEIpWkKKPTGvnRvyFUH18DNbfX0Z5hw&usqp=CAU",
-	"https://cdn.abo.media/upload/article/res/770-430/ffxcd3hf1bms2au1hc5u.jpg",
-];
+export const SwiperSlider: FC<SwiperSliderProps> = memo(({ className, images }) => {
+	const hasImages = images && images.length > 0;
+	const isSingleImage = images && images.length <= 1;
 
-export const SwiperSlider: FC<SwiperSliderProps> = memo(({ className }) => {
 	const swiperSlidesItems = useMemo(() => {
-		return images?.map((image, i) => {
-			return (
-				<li className="swiper-slide" key={i}>
-					<img
-						src={image}
-						alt=""
-						className={cls.Image}
-					/>
-				</li>
-			);
-		});
-	}, []);
+		return (hasImages ? images : [{ id: 0, url: PlaceHolderHeroImage }]).map((image) => (
+			<li className="swiper-slide" key={image.id}>
+				<img src={image.url} alt="slide" className={cls.Image} />
+			</li>
+		));
+	}, [images, hasImages]);
 
 	const swiperContainerRef = useRef(null);
 	const nextButtonRef = useRef(null);
@@ -44,6 +37,10 @@ export const SwiperSlider: FC<SwiperSliderProps> = memo(({ className }) => {
 	const swiperInstanceRef = useRef<any>(null);
 
 	useEffect(() => {
+		if (swiperInstanceRef.current) {
+			swiperInstanceRef.current.destroy(true, true);
+		}
+
 		if (swiperContainerRef.current) {
 			swiperInstanceRef.current = new Swiper(swiperContainerRef.current, {
 				spaceBetween: 5,
@@ -62,11 +59,8 @@ export const SwiperSlider: FC<SwiperSliderProps> = memo(({ className }) => {
 					bulletElement: "li",
 				},
 				centeredSlides: true,
-				breakpoints: {
-					// 768: {
-					// 	slidesPerView: "auto",
-					// },
-				},
+				breakpoints: {},
+				enabled: !isSingleImage,
 			});
 		}
 
@@ -75,32 +69,37 @@ export const SwiperSlider: FC<SwiperSliderProps> = memo(({ className }) => {
 				swiperInstanceRef.current.destroy(true, true);
 			}
 		};
-	}, []);
+	}, [images, isSingleImage]);
 
 	return (
 		<div
 			className={clsx(cls.SwiperSlider, "swiper-container", className)}
 			ref={swiperContainerRef}
 		>
-			<div className="swiper-wrapper">
+			<div className={clsx("swiper-wrapper", cls.SwiperSlider__swiperWrapper, {
+				[cls.SwiperSlider__swiperWrapper_disableGrab]: isSingleImage,
+			})}
+			>
 				{swiperSlidesItems}
 			</div>
-			<div className={cls.SwiperSlider__navigation}>
-				<UnstyledButton aria-label="prev-slide" className={clsx(cls.ArrowButton)} ref={prevButtonRef}>
-					<IconArrowLeft />
-				</UnstyledButton>
+			{!isSingleImage && (
+				<div className={cls.SwiperSlider__navigation}>
+					<UnstyledButton aria-label="prev-slide" className={clsx(cls.ArrowButton)} ref={prevButtonRef}>
+						<IconArrowLeft />
+					</UnstyledButton>
 
-				<ul
-					className={clsx(
-						cls.Bullets,
-						[cls.SwiperSlider__pagination],
-					)}
-					ref={paginationRef}
-				/>
-				<UnstyledButton aria-label="next-slide" className={clsx(cls.ArrowButton)} ref={nextButtonRef}>
-					<IconArrowRight />
-				</UnstyledButton>
-			</div>
+					<ul
+						className={clsx(
+							cls.Bullets,
+							[cls.SwiperSlider__pagination],
+						)}
+						ref={paginationRef}
+					/>
+					<UnstyledButton aria-label="next-slide" className={clsx(cls.ArrowButton)} ref={nextButtonRef}>
+						<IconArrowRight />
+					</UnstyledButton>
+				</div>
+			)}
 		</div>
 	);
 });

@@ -4,6 +4,12 @@
 
    overflow: hidden !important;
 
+   &__swiperWrapper {
+      &_disableGrab {
+         cursor: default !important;
+      }
+   }
+
    &__navigation {
       position: absolute;
       z-index: 1;
@@ -29,8 +35,10 @@
       }
    
       .swiper-wrapper {
+         max-width: 0;
+
          cursor: grab;
-      }   
+      }
    }
 }
 

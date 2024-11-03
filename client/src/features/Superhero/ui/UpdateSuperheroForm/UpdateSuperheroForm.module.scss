@@ -4,10 +4,15 @@
    gap: rem(50);
 
    &__slider {
-      flex: 0 0 300px;
+      flex: 0 0 rem(300);
    }
 
    &__form {
       flex: 1 1 auto;
+   }
+
+   @media (max-width: $breakpoint-sm) {
+      align-items: stretch;
+      flex-direction: column;
    }
 }

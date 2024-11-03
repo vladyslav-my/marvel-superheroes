@@ -8,6 +8,12 @@
       flex-direction: column;
       gap: rem(20);
    }
+
+   &__field {
+      textarea, input {
+         transition: all 0.3s ease;
+      }
+   }
 }
 
 .Buttons {

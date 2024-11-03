@@ -43,15 +43,12 @@ export class SuperheroController {
     const filePaths =
       images?.map((file) => `${baseUrl}/uploads/${file.filename}`) || [];
 
-    return this.superheroService.create({
-      ...createSuperheroDto,
-      images: filePaths,
-    });
+    return this.superheroService.create(createSuperheroDto, filePaths);
   }
 
   @Patch(':id')
   @UseInterceptors(FileUploadInterceptor.imagesInterceptor('images', 10))
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateSuperheroDto: UpdateSuperheroDto,
     @UploadedFiles() images: Express.Multer.File[],
@@ -62,15 +59,16 @@ export class SuperheroController {
       (file) => `${baseUrl}/uploads/${file.filename}`,
     );
 
-    return this.superheroService.update(+id, {
-      ...updateSuperheroDto,
-      images: filePaths,
-    });
+    await this.superheroService.update(+id, updateSuperheroDto, filePaths);
+
+    return {
+      message: 'Superhero updated success',
+    };
   }
 
   @Patch(':id/images')
   @UseInterceptors(FileUploadInterceptor.imagesInterceptor('images', 10))
-  addImages(
+  async addImages(
     @Param('id') id: string,
     @UploadedFiles() images: Express.Multer.File[],
     @Req() request: Request,
@@ -80,16 +78,31 @@ export class SuperheroController {
       (file) => `${baseUrl}/uploads/${file.filename}`,
     );
 
-    return this.superheroService.addImages(+id, filePaths);
+    await this.superheroService.addImages(+id, filePaths);
+
+    return {
+      message: 'Superhero images added success',
+    };
   }
 
   @Delete(':id/images')
-  deleteImages(@Param('id') id: string, @Body('imageIds') imageIds: number[]) {
-    return this.superheroService.deleteImages(+id, imageIds);
+  async deleteImages(
+    @Param('id') id: string,
+    @Body('imageIds') imageIds: number[],
+  ) {
+    await this.superheroService.deleteImages(+id, imageIds);
+
+    return {
+      message: 'Superhero images deleted success',
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.superheroService.remove(+id);
+  async remove(@Param('id') id: string) {
+    await this.superheroService.remove(+id);
+
+    return {
+      message: 'Superhero deleted success',
+    };
   }
 }

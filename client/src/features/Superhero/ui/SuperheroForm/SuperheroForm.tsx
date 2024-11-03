@@ -84,27 +84,27 @@ export const SuperheroForm: FC<SuperheroFormProps> = ({
 				<Controller
 					name="nickname"
 					control={form.control}
-					render={({ field }) => <TextInput readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Nickname" {...field} required />}
+					render={({ field }) => <TextInput className={cls.SuperheroForm__field} readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Nickname" {...field} required />}
 				/>
 				<Controller
 					name="real_name"
 					control={form.control}
-					render={({ field }) => <TextInput readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Real Name" {...field} />}
+					render={({ field }) => <TextInput className={cls.SuperheroForm__field} readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Real Name" {...field} />}
 				/>
 				<Controller
 					name="origin_description"
 					control={form.control}
-					render={({ field }) => <Textarea readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Origin Description" {...field} />}
+					render={({ field }) => <Textarea className={cls.SuperheroForm__field} readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Origin Description" {...field} />}
 				/>
 				<Controller
 					name="catch_phrase"
 					control={form.control}
-					render={({ field }) => <Textarea readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Catch Phrase" {...field} />}
+					render={({ field }) => <Textarea className={cls.SuperheroForm__field} readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Catch Phrase" {...field} />}
 				/>
 				<Controller
 					name="superpowers"
 					control={form.control}
-					render={({ field }) => <Textarea readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Superpowers" {...field} />}
+					render={({ field }) => <Textarea className={cls.SuperheroForm__field} readOnly={!isEditMode} variant={isEditMode ? "filled" : "unstyled"} size="md" label="Superpowers" {...field} />}
 				/>
 
 				{isEditMode && (
