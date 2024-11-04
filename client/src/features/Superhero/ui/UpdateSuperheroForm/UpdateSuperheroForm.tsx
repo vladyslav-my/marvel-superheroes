@@ -29,8 +29,8 @@ type ImageType = { id: number; url: string; isNew?: boolean };
 
 export const UpdateSuperheroForm: FC<UpdateSuperheroFormProps> = ({ className, id }) => {
 	const { data: superhero, isLoading: dataIsLoading, isFetching: dataIsFetching } = superheroApi.useGetOneQuery({ id });
-	const [updateSuperhero, { isLoading }] = superheroApi.useUpdateMutation();
-	const [deleteImages] = superheroApi.useDeleteImagesMutation();
+	const [updateSuperhero, { isLoading: updateSuperheroIsLoading }] = superheroApi.useUpdateMutation();
+	const [deleteImages, { isLoading: deleteImagesIsLoading }] = superheroApi.useDeleteImagesMutation();
 	const [images, setImages] = useState<ImageType[]>([]);
 	const [editMode, setEditMode] = useState<boolean>(false);
 
@@ -110,7 +110,7 @@ export const UpdateSuperheroForm: FC<UpdateSuperheroFormProps> = ({ className, i
 			<SuperheroForm
 				className={cls.UpdateSuperheroForm__form}
 				form={form}
-				isLoading={isLoading}
+				isLoading={updateSuperheroIsLoading || deleteImagesIsLoading}
 				onSubmit={onSubmit}
 				images={images}
 				setImages={setImages}

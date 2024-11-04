@@ -63,7 +63,7 @@ export const superheroApi = rtkApi.injectEndpoints({
 		}),
 
 		deleteImages: build.mutation<MessageResponse, { id: number, imageIds: number[] }>({
-			invalidatesTags: ["superhero"],
+			// invalidatesTags: ["superhero"],
 			query: ({ id, imageIds }) => ({
 				url: `superhero/${id}/images`,
 				method: "DELETE",

@@ -69,6 +69,7 @@ export const SuperheroCard: FC<SuperheroCardProps> = ({ className, entity }) => 
 				className={cls.SuperheroCard__button}
 				component={NavLink}
 				to={getSuperheroRoutePath(entity.id)}
+				loading={isLoading}
 				color="blue"
 				fullWidth
 				radius="md"
